@@ -12,8 +12,6 @@
 
 - Confirm the production contact email. The current CTA uses `andre@zian.ai` as a placeholder.
 - Add legal pages and footer links for imprint, privacy policy, and terms as required for the launch market.
-- Replace the default create-next-app README with project-specific setup, QA, and deployment notes.
-- Decide whether the default language should be German or English, then align metadata and the initial `lang` value.
 - Add analytics or conversion tracking only after consent requirements are defined.
 
 ## Design QA

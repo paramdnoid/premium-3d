@@ -106,6 +106,8 @@ export default function ZianAiConceptsExperience() {
         prefersReducedMotion ? "is-reduced-motion" : "",
       ].join(" ")}
     >
+      <h1 className="sr-only">ZIAN AI CONCEPTS</h1>
+
       <div
         className="ambient-field pointer-events-none fixed inset-0 z-0"
         style={ambientStyle}

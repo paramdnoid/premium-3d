@@ -1,3 +1,6 @@
+overrides:
+  "next>postcss": "8.5.14"
+
 allowBuilds:
   sharp: true
   unrs-resolver: true

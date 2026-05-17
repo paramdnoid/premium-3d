@@ -16,9 +16,9 @@ export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
-}>) {
+  }>) {
   return (
-    <html lang="en" className="h-full">
+    <html lang="de" className="h-full">
       <body suppressHydrationWarning>{children}</body>
     </html>
   );

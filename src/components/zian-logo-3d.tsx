@@ -110,8 +110,7 @@ function ZianLogoModel({
   rotationProgress,
 }: ZianLogoModelProps) {
   const groupRef = useRef<THREE.Group>(null);
-  const rimRef = useRef<THREE.MeshStandardMaterial>(null);
-  const zRef = useRef<THREE.MeshStandardMaterial>(null);
+  const rimMaterialRef = useRef<THREE.MeshStandardMaterial>(null);
 
   const geometry = useMemo(() => {
     const shell = new THREE.ExtrudeGeometry(createShape(outerPath), {
@@ -185,15 +184,6 @@ function ZianLogoModel({
         transparent: true,
         opacity: 0.78,
       }),
-      rim: new THREE.MeshStandardMaterial({
-        color: "#e8ebe3",
-        emissive: "#f4f7ef",
-        emissiveIntensity: 0.24,
-        metalness: 1,
-        roughness: 0.2,
-        transparent: true,
-        opacity: 0.1,
-      }),
       z: new THREE.MeshPhysicalMaterial({
         color: "#bfc1bb",
         emissive: "#989a94",
@@ -223,21 +213,27 @@ function ZianLogoModel({
       groupRef.current.rotation.x = 0;
       groupRef.current.rotation.y = scrollRotation;
       groupRef.current.rotation.z = 0;
-      groupRef.current.position.y = Math.sin(elapsed * 0.52) * 0.018;
+      groupRef.current.position.y = rotationEnabled
+        ? Math.sin(elapsed * 0.52) * 0.018
+        : 0;
     }
 
-    if (rimRef.current) {
-      rimRef.current.emissiveIntensity = 0.12 + Math.sin(elapsed * 1.7) * 0.018;
-      rimRef.current.opacity = 0.08 + Math.sin(elapsed * 1.4) * 0.012;
-    }
-
-    if (zRef.current) {
-      zRef.current.emissiveIntensity = 0;
+    if (rimMaterialRef.current) {
+      rimMaterialRef.current.emissiveIntensity = rotationEnabled
+        ? 0.12 + Math.sin(elapsed * 1.7) * 0.018
+        : 0.12;
+      rimMaterialRef.current.opacity = rotationEnabled
+        ? 0.08 + Math.sin(elapsed * 1.4) * 0.012
+        : 0.08;
     }
   });
 
   return (
-    <Float speed={0.85} rotationIntensity={0} floatIntensity={0.08}>
+    <Float
+      speed={rotationEnabled ? 0.85 : 0}
+      rotationIntensity={0}
+      floatIntensity={rotationEnabled ? 0.08 : 0}
+    >
       <group ref={groupRef} scale={1.06}>
         <mesh geometry={geometry.shell} material={materials.shell} position={[0, 0, -0.15]} />
         <mesh geometry={geometry.shell} material={materials.backMass} position={[0.08, -0.08, -0.5]} scale={1.01} />
@@ -260,8 +256,19 @@ function ZianLogoModel({
         })}
 
         <mesh geometry={geometry.core} material={materials.core} position={[0, 0, 0.23]} scale={[0.98, 0.98, 1]} />
-        <mesh geometry={geometry.edge} material={materials.rim} position={[0, 0, 0.31]} scale={[1.012, 1.012, 1]} ref={rimRef} />
-        <mesh geometry={geometry.z} material={materials.z} position={[0, 0.12, 0.52]} ref={zRef} />
+        <mesh geometry={geometry.edge} position={[0, 0, 0.31]} scale={[1.012, 1.012, 1]}>
+          <meshStandardMaterial
+            ref={rimMaterialRef}
+            color="#e8ebe3"
+            emissive="#f4f7ef"
+            emissiveIntensity={0.12}
+            metalness={1}
+            opacity={0.08}
+            roughness={0.2}
+            transparent
+          />
+        </mesh>
+        <mesh geometry={geometry.z} material={materials.z} position={[0, 0.12, 0.52]} />
         <mesh geometry={geometry.z} material={materials.zSide} position={[0.055, 0.06, 0.38]} scale={[1.008, 1.008, 0.72]} />
 
         <Line points={closeLine(outerPath, 0.63)} color="#f1f4eb" lineWidth={1.75} transparent opacity={0.68} />
@@ -276,7 +283,7 @@ function ZianLogoModel({
           <meshBasicMaterial color="#dce4d9" transparent opacity={0.078} depthWrite={false} />
         </mesh>
 
-        <Sparkles count={34} scale={[2.8, 3.5, 1.2]} size={1.2} speed={0.25} color="#f4d7a1" opacity={0.2} />
+        <Sparkles count={34} scale={[2.8, 3.5, 1.2]} size={1.2} speed={rotationEnabled ? 0.25 : 0} color="#f4d7a1" opacity={0.2} />
       </group>
     </Float>
   );
