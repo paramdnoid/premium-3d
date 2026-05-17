@@ -2,7 +2,6 @@
 
 import { Environment, Float, Line, Sparkles } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
-import Image from "next/image";
 import { useMemo, useRef } from "react";
 import * as THREE from "three";
 
@@ -50,39 +49,39 @@ const frontFacets: { points: Point2[]; color: string; opacity: number; roughness
       [-0.72, 0.8],
       outerPath[5],
     ],
-    color: "#222222",
-    opacity: 0.5,
+    color: "#151716",
+    opacity: 0.36,
     roughness: 0.58,
   },
   {
     points: [outerPath[5], [-0.72, 0.8], [-0.44, -0.36], outerPath[4]],
-    color: "#888888",
-    opacity: 0.08,
-    roughness: 0.72,
-  },
-  {
-    points: [outerPath[1], outerPath[2], [0.44, -0.36], [0.72, 0.8]],
-    color: "#ffffff",
-    opacity: 0.09,
-    roughness: 0.42,
-  },
-  {
-    points: [[-0.72, 0.8], [0, 1.05], [0.44, -0.36], [0, -1.12], [-0.44, -0.36]],
-    color: "#0a0a0a",
-    opacity: 0.46,
-    roughness: 0.86,
-  },
-  {
-    points: [outerPath[4], [-0.44, -0.36], [0, -1.12], outerPath[3]],
-    color: "#000000",
-    opacity: 0.52,
+    color: "#6d716b",
+    opacity: 0.06,
     roughness: 0.7,
   },
   {
-    points: [outerPath[2], outerPath[3], [0, -1.12], [0.44, -0.36]],
-    color: "#555555",
+    points: [outerPath[1], outerPath[2], [0.44, -0.36], [0.72, 0.8]],
+    color: "#d4d7cf",
     opacity: 0.08,
-    roughness: 0.5,
+    roughness: 0.44,
+  },
+  {
+    points: [[-0.72, 0.8], [0, 1.05], [0.44, -0.36], [0, -1.12], [-0.44, -0.36]],
+    color: "#050606",
+    opacity: 0.44,
+    roughness: 0.84,
+  },
+  {
+    points: [outerPath[4], [-0.44, -0.36], [0, -1.12], outerPath[3]],
+    color: "#050505",
+    opacity: 0.46,
+    roughness: 0.72,
+  },
+  {
+    points: [outerPath[2], outerPath[3], [0, -1.12], [0.44, -0.36]],
+    color: "#555851",
+    opacity: 0.06,
+    roughness: 0.54,
   },
 ];
 
@@ -101,7 +100,15 @@ function closeLine(points: Point2[], z: number): Point3[] {
   return [...points, points[0]].map(([x, y]) => [x, y, z]);
 }
 
-function ZianLogoModel() {
+type ZianLogoModelProps = {
+  rotationEnabled: boolean;
+  rotationProgress: number;
+};
+
+function ZianLogoModel({
+  rotationEnabled,
+  rotationProgress,
+}: ZianLogoModelProps) {
   const groupRef = useRef<THREE.Group>(null);
   const rimRef = useRef<THREE.MeshStandardMaterial>(null);
   const zRef = useRef<THREE.MeshStandardMaterial>(null);
@@ -155,52 +162,54 @@ function ZianLogoModel() {
 
   const materials = useMemo(
     () => ({
-      shell: new THREE.MeshPhysicalMaterial({
-        color: "#090909",
-        metalness: 0.58,
-        roughness: 0.56,
-        clearcoat: 0.5,
-        clearcoatRoughness: 0.32,
-        reflectivity: 0.42,
-      }),
-      backMass: new THREE.MeshStandardMaterial({
-        color: "#000000",
-        metalness: 0.46,
-        roughness: 0.76,
-      }),
-      core: new THREE.MeshPhysicalMaterial({
-        color: "#0a0a0a",
-        metalness: 0.62,
-        roughness: 0.48,
-        clearcoat: 0.42,
-        clearcoatRoughness: 0.28,
-        reflectivity: 0.48,
-        transparent: true,
-        opacity: 0.58,
-      }),
-      rim: new THREE.MeshStandardMaterial({
-        color: "#c9cec5",
-        emissive: "#dde4da",
-        emissiveIntensity: 0.11,
-        metalness: 1,
-        roughness: 0.26,
-        transparent: true,
-        opacity: 0.42,
-      }),
-      z: new THREE.MeshPhysicalMaterial({
-        color: "#5f605d",
+      shell: new THREE.MeshStandardMaterial({
+        color: "#010202",
         emissive: "#000000",
         emissiveIntensity: 0,
+        metalness: 0,
+        roughness: 1,
+      }),
+      backMass: new THREE.MeshStandardMaterial({
+        color: "#030404",
+        emissive: "#010101",
+        emissiveIntensity: 0.02,
+        metalness: 0.16,
+        roughness: 0.86,
+      }),
+      core: new THREE.MeshStandardMaterial({
+        color: "#030303",
+        emissive: "#000000",
+        emissiveIntensity: 0,
+        metalness: 0,
+        roughness: 1,
+        transparent: true,
+        opacity: 0.78,
+      }),
+      rim: new THREE.MeshStandardMaterial({
+        color: "#e8ebe3",
+        emissive: "#f4f7ef",
+        emissiveIntensity: 0.24,
         metalness: 1,
+        roughness: 0.2,
+        transparent: true,
+        opacity: 0.1,
+      }),
+      z: new THREE.MeshPhysicalMaterial({
+        color: "#bfc1bb",
+        emissive: "#989a94",
+        emissiveIntensity: 0.18,
+        metalness: 0.88,
         roughness: 0.24,
-        clearcoat: 0.62,
-        clearcoatRoughness: 0.2,
-        reflectivity: 0.54,
+        clearcoat: 0.7,
+        clearcoatRoughness: 0.18,
+        reflectivity: 0.58,
       }),
       zSide: new THREE.MeshStandardMaterial({
-        color: "#171817",
-        metalness: 0.85,
-        roughness: 0.3,
+        color: "#22231f",
+        emissive: "#050505",
+        emissiveIntensity: 0.03,
+        metalness: 0.82,
+        roughness: 0.28,
       }),
     }),
     [],
@@ -208,17 +217,18 @@ function ZianLogoModel() {
 
   useFrame((state) => {
     const elapsed = state.clock.elapsedTime;
+    const scrollRotation = rotationEnabled ? rotationProgress * Math.PI * 2 : 0;
 
     if (groupRef.current) {
       groupRef.current.rotation.x = 0;
-      groupRef.current.rotation.y = 0;
+      groupRef.current.rotation.y = scrollRotation;
       groupRef.current.rotation.z = 0;
       groupRef.current.position.y = Math.sin(elapsed * 0.52) * 0.018;
     }
 
     if (rimRef.current) {
-      rimRef.current.emissiveIntensity = 0.08 + Math.sin(elapsed * 1.7) * 0.025;
-      rimRef.current.opacity = 0.34 + Math.sin(elapsed * 1.4) * 0.035;
+      rimRef.current.emissiveIntensity = 0.12 + Math.sin(elapsed * 1.7) * 0.018;
+      rimRef.current.opacity = 0.08 + Math.sin(elapsed * 1.4) * 0.012;
     }
 
     if (zRef.current) {
@@ -254,12 +264,12 @@ function ZianLogoModel() {
         <mesh geometry={geometry.z} material={materials.z} position={[0, 0.12, 0.52]} ref={zRef} />
         <mesh geometry={geometry.z} material={materials.zSide} position={[0.055, 0.06, 0.38]} scale={[1.008, 1.008, 0.72]} />
 
-        <Line points={closeLine(outerPath, 0.63)} color="#e8eee2" lineWidth={1.65} transparent opacity={0.34} />
-        <Line points={closeLine(innerPath, 0.66)} color="#ecf0e8" lineWidth={0.85} transparent opacity={0.18} dashed dashSize={0.055} gapSize={0.05} />
-        <Line points={[[0, 1.22, 0.67], [0, 0.78, 0.67], [0, -1.12, 0.67]]} color="#f4f7f0" lineWidth={0.62} transparent opacity={0.18} />
-        <Line points={[[-0.68, 0.55, 0.68], [0.67, 0.55, 0.68]]} color="#f4f7f0" lineWidth={0.72} transparent opacity={0.2} />
-        <Line points={[[-0.68, -0.49, 0.68], [0.68, -0.49, 0.68]]} color="#f4f7f0" lineWidth={0.72} transparent opacity={0.16} />
-        <Line points={[[-0.58, 0.28, 0.69], [0.5, -0.42, 0.69]]} color="#f4f7f0" lineWidth={0.56} transparent opacity={0.16} />
+        <Line points={closeLine(outerPath, 0.63)} color="#f1f4eb" lineWidth={1.75} transparent opacity={0.68} />
+        <Line points={closeLine(innerPath, 0.66)} color="#dce1d7" lineWidth={0.9} transparent opacity={0.26} dashed dashSize={0.055} gapSize={0.05} />
+        <Line points={[[0, 1.22, 0.67], [0, 0.78, 0.67], [0, -1.12, 0.67]]} color="#dce1d7" lineWidth={0.62} transparent opacity={0.26} />
+        <Line points={[[-0.68, 0.55, 0.68], [0.67, 0.55, 0.68]]} color="#e9ece4" lineWidth={0.72} transparent opacity={0.32} />
+        <Line points={[[-0.68, -0.49, 0.68], [0.68, -0.49, 0.68]]} color="#dce1d7" lineWidth={0.72} transparent opacity={0.26} />
+        <Line points={[[-0.58, 0.28, 0.69], [0.5, -0.42, 0.69]]} color="#e9ece4" lineWidth={0.56} transparent opacity={0.28} />
 
         <mesh position={[0, -1.84, -0.7]} rotation={[-Math.PI / 2, 0, 0]} scale={[1.6, 0.34, 1]}>
           <circleGeometry args={[1, 64]} />
@@ -272,19 +282,17 @@ function ZianLogoModel() {
   );
 }
 
-export default function ZianLogo3D() {
+type ZianLogo3DProps = {
+  rotationEnabled?: boolean;
+  rotationProgress?: number;
+};
+
+export default function ZianLogo3D({
+  rotationEnabled = true,
+  rotationProgress = 0,
+}: ZianLogo3DProps) {
   return (
     <div className="zian-logo-3d-stage" aria-hidden="true">
-      <Image
-        className="zian-logo-3d-fallback"
-        src="/zian-monolith-signet.svg"
-        alt=""
-        width={360}
-        height={360}
-        priority
-        unoptimized
-        draggable={false}
-      />
       <Canvas
         orthographic
         camera={{ position: [0, 0, 7], zoom: 96, near: 0.1, far: 100 }}
@@ -296,13 +304,16 @@ export default function ZianLogo3D() {
           toneMapping: THREE.ACESFilmicToneMapping,
         }}
       >
-        <ambientLight intensity={0.46} />
-        <directionalLight position={[-2.4, 2.8, 4.8]} intensity={1.2} color="#f6f6ee" />
-        <directionalLight position={[2.8, -1.2, 3.4]} intensity={0.42} color="#cccccc" />
-        <pointLight position={[0.2, 1.8, 2.6]} intensity={5.2} color="#dde4da" distance={5.6} decay={2.2} />
-        <pointLight position={[-1.6, -1.1, 2.4]} intensity={2.4} color="#ffffff" distance={4.2} decay={2} />
-        <Environment preset="city" environmentIntensity={0.22} />
-        <ZianLogoModel />
+        <ambientLight intensity={0.34} />
+        <directionalLight position={[-2.6, 2.9, 4.8]} intensity={0.86} color="#f7f7ef" />
+        <directionalLight position={[2.7, -1.2, 3.4]} intensity={0.34} color="#d7d9d0" />
+        <pointLight position={[0.2, 1.8, 2.6]} intensity={3.4} color="#eef2e7" distance={5.6} decay={2.2} />
+        <pointLight position={[-1.6, -1.1, 2.4]} intensity={1.7} color="#ffffff" distance={4.2} decay={2} />
+        <Environment preset="city" environmentIntensity={0.12} />
+        <ZianLogoModel
+          rotationEnabled={rotationEnabled}
+          rotationProgress={rotationProgress}
+        />
       </Canvas>
     </div>
   );
