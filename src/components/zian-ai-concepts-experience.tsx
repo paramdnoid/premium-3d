@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import type { CSSProperties, MouseEvent } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import ZianLogo3D from "./zian-logo-3d";
 
 const navItems = [
   { href: "#services", label: "Services" },
@@ -287,15 +287,7 @@ export default function ZianAiConceptsExperience() {
         className="pointer-events-none fixed inset-0 z-20 grid place-items-center px-6"
         aria-hidden="true"
       >
-        <Image
-          src="/zian-monolith-signet.svg"
-          alt=""
-          width={360}
-          height={360}
-          priority
-          unoptimized
-          className="h-auto w-[min(62vw,360px)] object-contain"
-        />
+        <ZianLogo3D />
       </div>
 
       <div className="relative z-10">

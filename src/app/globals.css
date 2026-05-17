@@ -124,6 +124,66 @@ a {
   opacity: 0.2;
 }
 
+.zian-logo-3d-stage {
+  position: relative;
+  width: min(72vw, 440px);
+  aspect-ratio: 1;
+  filter:
+    drop-shadow(0 42px 54px rgba(0, 0, 0, 0.92))
+    drop-shadow(0 0 34px rgba(244, 215, 161, 0.11));
+  transform: translate3d(0, 0, 0);
+}
+
+.zian-logo-3d-stage::before,
+.zian-logo-3d-stage::after {
+  pointer-events: none;
+  position: absolute;
+  content: "";
+  border-radius: 999px;
+}
+
+.zian-logo-3d-stage::before {
+  inset: 12% 10% 10%;
+  background:
+    radial-gradient(circle at 48% 35%, rgba(248, 251, 255, 0.14), transparent 34%),
+    radial-gradient(circle at 50% 56%, rgba(244, 215, 161, 0.09), transparent 58%);
+  filter: blur(22px);
+  opacity: 0.82;
+}
+
+.zian-logo-3d-stage::after {
+  left: 18%;
+  right: 18%;
+  bottom: 5%;
+  height: 8%;
+  background: radial-gradient(ellipse at center, rgba(222, 232, 222, 0.2), rgba(244, 215, 161, 0.08) 42%, transparent 74%);
+  filter: blur(10px);
+  opacity: 0.72;
+  transform: perspective(420px) rotateX(62deg);
+}
+
+.zian-logo-3d-stage canvas {
+  position: relative;
+  z-index: 1;
+  display: block;
+}
+
+.zian-logo-3d-fallback {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 1;
+}
+
+@media (max-width: 640px) {
+  .zian-logo-3d-stage {
+    width: min(78vw, 340px);
+  }
+}
+
 .scroll-section {
   position: relative;
 }
