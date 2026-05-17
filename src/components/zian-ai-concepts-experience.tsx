@@ -322,7 +322,7 @@ export default function ZianAiConceptsExperience() {
         <div className="mx-auto flex h-6 max-w-7xl items-center justify-center px-5">
           <span className="site-glass-footer__handle" />
         </div>
-        <div className="mx-auto h-[calc(100%-1.5rem)] max-w-7xl px-5" />
+        <div className="site-glass-footer__body mx-auto h-[calc(100%-1.5rem)] max-w-7xl px-5" />
       </footer>
     </main>
   );
