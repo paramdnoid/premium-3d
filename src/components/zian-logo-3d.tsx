@@ -39,6 +39,8 @@ const zianZPath: Point2[] = [
   [-0.88, 0.33],
 ];
 
+const rearZPath = zianZPath.map(([x, y]) => [-x, y] satisfies Point2);
+
 const frontFacets: { points: Point2[]; color: string; opacity: number; roughness: number }[] = [
   {
     points: [
@@ -141,6 +143,10 @@ function ZianLogoModel({
       steps: 2,
     });
     const facets = frontFacets.map((facet) => new THREE.ShapeGeometry(createShape(facet.points)));
+    const rearPanel = new THREE.ShapeGeometry(createShape(outerPath));
+    const rearInset = new THREE.ShapeGeometry(createShape(innerPath));
+    const rearZ = new THREE.ShapeGeometry(createShape(rearZPath));
+    const rivet = new THREE.SphereGeometry(0.018, 12, 12);
     const edge = new THREE.ExtrudeGeometry(createShape(outerPath), {
       depth: 0.08,
       bevelEnabled: true,
@@ -156,24 +162,17 @@ function ZianLogoModel({
     z.center();
     edge.center();
 
-    return { core, edge, facets, shell, z };
+    return { core, edge, facets, rearInset, rearPanel, rearZ, rivet, shell, z };
   }, []);
 
   const materials = useMemo(
     () => ({
       shell: new THREE.MeshStandardMaterial({
-        color: "#010202",
-        emissive: "#000000",
-        emissiveIntensity: 0,
-        metalness: 0,
-        roughness: 1,
-      }),
-      backMass: new THREE.MeshStandardMaterial({
-        color: "#030404",
-        emissive: "#010101",
-        emissiveIntensity: 0.02,
-        metalness: 0.16,
-        roughness: 0.86,
+        color: "#050706",
+        emissive: "#020403",
+        emissiveIntensity: 0.035,
+        metalness: 0.68,
+        roughness: 0.52,
       }),
       core: new THREE.MeshStandardMaterial({
         color: "#030303",
@@ -200,6 +199,52 @@ function ZianLogoModel({
         emissiveIntensity: 0.03,
         metalness: 0.82,
         roughness: 0.28,
+      }),
+      rearPanel: new THREE.MeshPhysicalMaterial({
+        color: "#111511",
+        emissive: "#070a07",
+        emissiveIntensity: 0.08,
+        metalness: 0.88,
+        opacity: 0.92,
+        roughness: 0.34,
+        clearcoat: 0.42,
+        clearcoatRoughness: 0.28,
+        side: THREE.DoubleSide,
+        transparent: true,
+      }),
+      rearInset: new THREE.MeshPhysicalMaterial({
+        color: "#1b1f1a",
+        emissive: "#0a0d0b",
+        emissiveIntensity: 0.08,
+        metalness: 0.9,
+        opacity: 0.58,
+        roughness: 0.26,
+        clearcoat: 0.52,
+        clearcoatRoughness: 0.22,
+        side: THREE.DoubleSide,
+        transparent: true,
+      }),
+      rearZ: new THREE.MeshStandardMaterial({
+        color: "#d4d7cf",
+        emissive: "#7f837b",
+        emissiveIntensity: 0.12,
+        metalness: 0.94,
+        opacity: 0.18,
+        roughness: 0.2,
+        side: THREE.DoubleSide,
+        transparent: true,
+      }),
+      rearRivet: new THREE.MeshBasicMaterial({
+        color: "#dce1d7",
+        opacity: 0.24,
+        transparent: true,
+      }),
+      rearShadow: new THREE.MeshStandardMaterial({
+        color: "#070908",
+        emissive: "#030504",
+        emissiveIntensity: 0.04,
+        metalness: 0.76,
+        roughness: 0.48,
       }),
     }),
     [],
@@ -236,7 +281,19 @@ function ZianLogoModel({
     >
       <group ref={groupRef} scale={1.06}>
         <mesh geometry={geometry.shell} material={materials.shell} position={[0, 0, -0.15]} />
-        <mesh geometry={geometry.shell} material={materials.backMass} position={[0.08, -0.08, -0.5]} scale={1.01} />
+        <mesh geometry={geometry.edge} material={materials.rearShadow} position={[0.04, -0.05, -0.5]} scale={[0.96, 0.96, 1.7]} />
+        <mesh geometry={geometry.rearPanel} material={materials.rearPanel} position={[0, 0, -0.62]} scale={0.96} />
+        <mesh geometry={geometry.rearInset} material={materials.rearInset} position={[0, 0, -0.645]} scale={0.9} />
+        <mesh geometry={geometry.rearZ} material={materials.rearZ} position={[0, 0.04, -0.672]} scale={0.72} />
+
+        {outerPath.map(([x, y], index) => (
+          <mesh
+            key={`rear-rivet-${index}`}
+            geometry={geometry.rivet}
+            material={materials.rearRivet}
+            position={[x * 0.92, y * 0.92, -0.69]}
+          />
+        ))}
 
         {geometry.facets.map((facetGeometry, index) => {
           const facet = frontFacets[index];
@@ -273,10 +330,25 @@ function ZianLogoModel({
 
         <Line points={closeLine(outerPath, 0.63)} color="#f1f4eb" lineWidth={1.75} transparent opacity={0.68} />
         <Line points={closeLine(innerPath, 0.66)} color="#dce1d7" lineWidth={0.9} transparent opacity={0.26} dashed dashSize={0.055} gapSize={0.05} />
+        <Line points={closeLine(outerPath, -0.7)} color="#dce1d7" lineWidth={1.2} transparent opacity={0.42} />
+        <Line points={closeLine(innerPath, -0.72)} color="#aeb4aa" lineWidth={0.65} transparent opacity={0.18} dashed dashSize={0.065} gapSize={0.055} />
+        {outerPath.map(([x, y], index) => (
+          <Line
+            key={`depth-rib-${index}`}
+            points={[[x, y, -0.66], [x, y, 0.58]]}
+            color="#c8ccc3"
+            lineWidth={0.44}
+            transparent
+            opacity={0.18}
+          />
+        ))}
         <Line points={[[0, 1.22, 0.67], [0, 0.78, 0.67], [0, -1.12, 0.67]]} color="#dce1d7" lineWidth={0.62} transparent opacity={0.26} />
         <Line points={[[-0.68, 0.55, 0.68], [0.67, 0.55, 0.68]]} color="#e9ece4" lineWidth={0.72} transparent opacity={0.32} />
         <Line points={[[-0.68, -0.49, 0.68], [0.68, -0.49, 0.68]]} color="#dce1d7" lineWidth={0.72} transparent opacity={0.26} />
         <Line points={[[-0.58, 0.28, 0.69], [0.5, -0.42, 0.69]]} color="#e9ece4" lineWidth={0.56} transparent opacity={0.28} />
+        <Line points={[[0, 1.1, -0.735], [0, -1.1, -0.735]]} color="#cfd4cc" lineWidth={0.52} transparent opacity={0.22} />
+        <Line points={[[-0.58, 0.36, -0.74], [0.58, -0.36, -0.74]]} color="#e3e6dd" lineWidth={0.5} transparent opacity={0.2} />
+        <Line points={[[-0.52, -0.58, -0.745], [0.52, -0.58, -0.745]]} color="#cfd4cc" lineWidth={0.48} transparent opacity={0.18} />
 
         <mesh position={[0, -1.84, -0.7]} rotation={[-Math.PI / 2, 0, 0]} scale={[1.6, 0.34, 1]}>
           <circleGeometry args={[1, 64]} />
@@ -314,8 +386,10 @@ export default function ZianLogo3D({
         <ambientLight intensity={0.34} />
         <directionalLight position={[-2.6, 2.9, 4.8]} intensity={0.86} color="#f7f7ef" />
         <directionalLight position={[2.7, -1.2, 3.4]} intensity={0.34} color="#d7d9d0" />
+        <directionalLight position={[0.8, 2.1, -4.2]} intensity={0.52} color="#dce7d8" />
         <pointLight position={[0.2, 1.8, 2.6]} intensity={3.4} color="#eef2e7" distance={5.6} decay={2.2} />
         <pointLight position={[-1.6, -1.1, 2.4]} intensity={1.7} color="#ffffff" distance={4.2} decay={2} />
+        <pointLight position={[1.8, 0.6, -3.2]} intensity={2.2} color="#f4d7a1" distance={4.8} decay={2.1} />
         <Environment preset="city" environmentIntensity={0.12} />
         <ZianLogoModel
           rotationEnabled={rotationEnabled}
