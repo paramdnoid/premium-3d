@@ -1,4 +1,7 @@
+import Image from "next/image";
 import { statsContent } from "@/lib/content/site-content";
+
+const statsArtworkSrc = "/assets/stats-dotted-corners.svg";
 
 /** Section 03 — Zahlen: three headline metrics. */
 export function StatsSection() {
@@ -8,12 +11,17 @@ export function StatsSection() {
       <span aria-hidden="true" className="micro-mark bottom-[3.1rem] right-[2.3rem]" />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-[radial-gradient(circle_at_4%_46%,rgba(217,185,120,0.13)_0_1px,transparent_2px)] bg-[length:18px_18px] opacity-50"
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-y-0 right-0 w-1/3 bg-[radial-gradient(circle_at_96%_58%,rgba(217,185,120,0.13)_0_1px,transparent_2px)] bg-[length:18px_18px] opacity-50"
-      />
+        className="pointer-events-none absolute inset-0 opacity-[0.78]"
+      >
+        <Image
+          src={statsArtworkSrc}
+          alt=""
+          fill
+          unoptimized
+          sizes="100vw"
+          className="object-cover"
+        />
+      </div>
       <div className="zian-container relative z-10">
         <p className="section-label">
           <span className="section-label__index">{statsContent.index}</span>

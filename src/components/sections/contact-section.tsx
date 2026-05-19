@@ -2,7 +2,7 @@ import Image from "next/image";
 import { contactContent } from "@/lib/content/site-content";
 import { Icon } from "@/components/icons";
 
-const contactArtworkSrc = "/assets/abstract-architecture-glow.svg";
+const contactArtworkSrc = "/assets/luminous-perspective-grid.svg";
 
 /** Section 05 — Kontakt: the closing call to action. */
 export function ContactSection() {
@@ -15,13 +15,14 @@ export function ContactSection() {
           src={contactArtworkSrc}
           alt=""
           fill
+          unoptimized
           sizes="100vw"
-          className="object-cover object-[19%_58%] opacity-34 md:opacity-46"
+          className="object-cover object-[5%_58%] opacity-[0.56] md:opacity-[0.78]"
         />
       </div>
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_35%_52%,rgba(217,185,120,0.12),transparent_34%),linear-gradient(90deg,rgba(2,3,3,0.38)_0%,rgba(2,3,3,0.72)_45%,#020303_100%),linear-gradient(180deg,#020303_0%,rgba(2,3,3,0.52)_38%,#020303_100%)]"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_29%_55%,rgba(217,185,120,0.08),transparent_36%),linear-gradient(90deg,rgba(2,3,3,0.12)_0%,rgba(2,3,3,0.62)_47%,#020303_100%),linear-gradient(180deg,#020303_0%,rgba(2,3,3,0.36)_38%,#020303_100%)]"
       />
       <div className="zian-container relative z-10">
         <div className="mx-auto max-w-[41rem] text-center">

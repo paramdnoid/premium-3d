@@ -10,7 +10,7 @@ export function ApproachSection({ reduced = false }: { reduced?: boolean }) {
       className="section-band overflow-hidden"
     >
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-        <AbstractArchitectureGlow reduced={reduced} className="opacity-20" />
+        <AbstractArchitectureGlow reduced={reduced} className="opacity-[0.14]" />
       </div>
       <div
         aria-hidden="true"

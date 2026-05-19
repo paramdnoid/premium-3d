@@ -1,9 +1,6 @@
-import Image from "next/image";
 import { heroContent } from "@/lib/content/site-content";
 import { Icon } from "@/components/icons";
-import { HeroSignet } from "@/components/scene/hero-signet";
-
-const heroArtworkSrc = "/assets/abstract-architecture-glow.svg";
+import { PremiumArchitecturalObject } from "@/components/scene/premium-architectural-object";
 
 /** Opening hero — reference-like headline with a restrained architectural HUD. */
 export function HeroSection({ reduced = false }: { reduced?: boolean }) {
@@ -13,30 +10,20 @@ export function HeroSection({ reduced = false }: { reduced?: boolean }) {
       data-reduced-motion={reduced ? "true" : undefined}
       className="relative isolate min-h-svh overflow-hidden border-b border-white/[0.075] pt-[5.25rem]"
     >
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-        <Image
-          src={heroArtworkSrc}
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover object-[75%_48%] opacity-30 mix-blend-screen md:opacity-70"
-        />
-      </div>
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,#020303_0%,rgba(2,3,3,0.99)_27%,rgba(2,3,3,0.82)_47%,rgba(2,3,3,0.18)_70%,rgba(2,3,3,0.55)_100%)]"
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_76%_44%,rgba(217,185,120,0.15),transparent_34%),linear-gradient(180deg,rgba(0,0,0,0.44)_0%,rgba(0,0,0,0.06)_32%,rgba(0,0,0,0.15)_68%,rgba(0,0,0,0.74)_100%)]"
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-y-[5.25rem] right-0 z-[6] hidden w-[58vw] max-w-[55rem] lg:block"
+        className="pointer-events-none absolute inset-y-0 right-0 hidden w-[66vw] min-w-[42rem] max-w-[72rem] overflow-hidden lg:block"
       >
-        <HeroSignet reduced={reduced} />
+        <PremiumArchitecturalObject reduced={reduced} className="opacity-[0.96]" />
       </div>
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,#020303_0%,rgba(2,3,3,0.99)_31%,rgba(2,3,3,0.86)_47%,rgba(2,3,3,0.22)_67%,rgba(2,3,3,0.5)_100%)]"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_78%_43%,rgba(217,185,120,0.12),transparent_33%),linear-gradient(180deg,rgba(0,0,0,0.46)_0%,rgba(0,0,0,0.06)_32%,rgba(0,0,0,0.14)_68%,rgba(0,0,0,0.76)_100%)]"
+      />
       <div
         aria-hidden="true"
         className="pointer-events-none absolute bottom-0 left-0 right-0 h-px bg-[linear-gradient(90deg,transparent,rgba(217,185,120,0.36),transparent)]"
