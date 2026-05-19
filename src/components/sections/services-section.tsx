@@ -12,19 +12,23 @@ export function ServicesSection() {
           {servicesContent.eyebrow}
         </p>
 
-        <div className="mt-9 grid gap-5 md:grid-cols-3">
-          {servicesContent.cards.map((card) => (
+        <div className="mt-8 grid gap-4 md:grid-cols-3">
+          {servicesContent.cards.map((card, cardIndex) => (
             <article
               key={card.title}
-              className="tech-panel group flex min-h-[21.5rem] flex-col p-8 pt-10 transition-colors duration-300 hover:border-[#d9b978]/34 md:p-10"
+              className="tech-panel group flex min-h-[20.4rem] flex-col p-7 pt-9 transition-colors duration-300 hover:border-[#d9b978]/34 md:p-9 md:pt-10"
             >
-              <span className="flex h-14 w-14 items-center justify-center border border-white/[0.12] text-[#f3f4f1]/80 shadow-[0_0_24px_rgba(217,185,120,0.06)]">
+              <span aria-hidden="true" className="technical-rail" />
+              <span className="tech-panel__index mb-7">
+                {String(cardIndex + 1).padStart(2, "0")}
+              </span>
+              <span className="flex h-[3.25rem] w-[3.25rem] items-center justify-center border border-white/[0.11] bg-black/12 text-[#f3f4f1]/78 shadow-[0_0_24px_rgba(217,185,120,0.055)]">
                 <Icon name={card.icon} className="h-5 w-5" />
               </span>
-              <h3 className="mt-10 text-[1.18rem] font-bold text-[#f3f4f1]">
+              <h3 className="mt-8 text-[1.08rem] font-bold text-[#f3f4f1]">
                 {card.title}
               </h3>
-              <p className="mt-5 flex-1 text-[0.88rem] leading-[1.85] text-[#f3f4f1]/54">
+              <p className="mt-5 flex-1 text-[0.84rem] leading-[1.84] text-[#f3f4f1]/54">
                 {card.body}
               </p>
               <Icon

@@ -12,7 +12,7 @@ export function ProcessSection() {
           {processContent.eyebrow}
         </p>
 
-        <div className="mt-10 grid gap-7 md:grid-cols-2 md:items-start">
+        <div className="mt-9 grid gap-7 md:grid-cols-2 md:items-start">
           <h2 className="section-heading max-w-[33rem]">
             {processContent.title}
           </h2>
@@ -21,7 +21,7 @@ export function ProcessSection() {
           </p>
         </div>
 
-        <ol className="relative mt-16 grid gap-7 md:grid-cols-3">
+        <ol className="relative mt-14 grid gap-6 md:grid-cols-3">
           <span
             aria-hidden="true"
             className="absolute left-[3%] right-[3%] top-1/2 hidden h-px bg-[linear-gradient(90deg,transparent,rgba(217,185,120,0.58),transparent)] md:block"
@@ -29,20 +29,21 @@ export function ProcessSection() {
           {processContent.steps.map((step) => (
             <li
               key={step.index}
-              className="tech-panel relative min-h-[16.8rem] p-8 pb-20 md:p-10 md:pb-20"
+              className="tech-panel relative min-h-[15.8rem] p-7 pb-[4.5rem] md:p-9 md:pb-[4.5rem]"
             >
-              <span className="text-[0.93rem] font-bold tracking-[0.18em] text-[#d9b978]/78">
+              <span aria-hidden="true" className="technical-rail" />
+              <span className="tech-panel__index">
                 {step.index}
               </span>
-              <h3 className="mt-8 text-[0.92rem] font-bold uppercase tracking-[0.12em] text-[#f3f4f1]">
+              <h3 className="mt-7 text-[0.9rem] font-bold uppercase tracking-[0.12em] text-[#f3f4f1]">
                 {step.title}
               </h3>
-              <p className="mt-4 text-[0.88rem] leading-[1.75] text-[#f3f4f1]/54">
+              <p className="mt-4 text-[0.84rem] leading-[1.75] text-[#f3f4f1]/54">
                 {step.body}
               </p>
               <Icon
                 name={step.icon}
-                className="absolute bottom-8 right-8 h-5 w-5 text-[#f3f4f1]/42"
+                className="absolute bottom-7 right-7 h-5 w-5 text-[#f3f4f1]/42"
               />
             </li>
           ))}

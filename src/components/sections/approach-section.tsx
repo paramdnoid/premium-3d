@@ -10,14 +10,14 @@ export function ApproachSection({ reduced = false }: { reduced?: boolean }) {
       className="section-band overflow-hidden"
     >
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-        <AbstractArchitectureGlow reduced={reduced} className="opacity-26" />
+        <AbstractArchitectureGlow reduced={reduced} className="opacity-20" />
       </div>
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,#020303_0%,rgba(2,3,3,0.95)_42%,rgba(2,3,3,0.66)_72%,#020303_100%)]"
+        className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,#020303_0%,rgba(2,3,3,0.96)_43%,rgba(2,3,3,0.75)_72%,#020303_100%)]"
       />
 
-      <div className="zian-container relative z-10 grid gap-12 md:grid-cols-[0.9fr_1.1fr] md:gap-20">
+      <div className="zian-container relative z-10 grid gap-12 md:grid-cols-[0.88fr_1.12fr] md:gap-[4.5rem]">
         <div className="max-w-[31rem]">
           <p className="section-label">
             <span className="section-label__index">{approachContent.index}</span>
@@ -32,17 +32,18 @@ export function ApproachSection({ reduced = false }: { reduced?: boolean }) {
           </p>
           <a
             href={approachContent.link.href}
-            className="zian-link mt-10"
+            className="zian-link mt-9"
           >
             {approachContent.link.label}
             <Icon name="arrow-right" className="h-4 w-4" />
           </a>
         </div>
 
-        <ul className="tech-panel self-center divide-y divide-white/[0.075]">
+        <ul className="tech-panel self-center divide-y divide-white/[0.07]">
+          <span aria-hidden="true" className="technical-rail" />
           {approachContent.points.map((point) => (
-            <li key={point.title} className="grid gap-6 p-7 md:grid-cols-[3rem_1fr] md:p-10">
-              <span className="text-[1.04rem] font-bold tracking-[0.12em] text-[#d9b978]/78">
+            <li key={point.title} className="grid gap-6 p-7 md:grid-cols-[3rem_1fr] md:p-9">
+              <span className="tech-panel__index text-[1.02rem]">
                 {point.index}
               </span>
               <div>
