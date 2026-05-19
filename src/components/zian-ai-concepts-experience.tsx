@@ -2,8 +2,8 @@
 
 import type { CSSProperties } from "react";
 import { useEffect, useState } from "react";
-import { useScrollRig } from "@/lib/scroll/use-scroll-rig";
-import { JourneyLogo } from "./scene/journey-logo";
+import { SiteHeader } from "./site-header";
+import { SiteFooter } from "./site-footer";
 import { ApproachSection } from "./sections/approach-section";
 import { ContactSection } from "./sections/contact-section";
 import { HeroSection } from "./sections/hero-section";
@@ -27,7 +27,6 @@ const ambientStyle: CSSProperties & Record<`--ambient-${string}`, string> = {
 
 export default function ZianAiConceptsExperience() {
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
-  const scrollState = useScrollRig();
 
   useEffect(() => {
     const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -60,21 +59,16 @@ export default function ZianAiConceptsExperience() {
         <div className="ambient-field__grain" />
       </div>
 
-      {/* The disassembling signet — fixed behind the content, never blocks input. */}
-      <div
-        className="journey-canvas pointer-events-none fixed inset-0 z-[2]"
-        aria-hidden="true"
-      >
-        <JourneyLogo scrollRef={scrollState} />
-      </div>
+      <SiteHeader />
 
       <div className="relative z-10">
-        <HeroSection />
+        <HeroSection reduced={prefersReducedMotion} />
         <ServicesSection />
-        <ApproachSection />
+        <ApproachSection reduced={prefersReducedMotion} />
         <StatsSection />
         <ProcessSection />
         <ContactSection />
+        <SiteFooter />
       </div>
     </main>
   );
