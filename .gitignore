@@ -12,7 +12,7 @@
 .playwright-mcp
 .pnpm-store
 .codex-chrome
-.codex-sceenshots
+.codex-screenshots
 
 # testing
 /coverage
