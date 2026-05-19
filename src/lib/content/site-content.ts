@@ -22,16 +22,17 @@ export const headerContent = {
 export const heroContent = {
   eyebrow: "Premium Konzepte. Klare Umsetzung.",
   headline: "KI-Konzepte, Software und Automatisierung —",
+  headlineLines: ["KI-Konzepte,", "Software und", "Automatisierung —"],
   headlineAccent: "Präzise gebaut.",
-  body: "Ich entwickle durchdachte Konzepte, individuelle Software und automatisierte Abläufe – maßgeschneidert, transparent und auf messbare Ergebnisse ausgerichtet.",
+  body: "Ich entwickle durchdachte Konzepte, individuelle Software und smarte Automatisierungslösungen, die Prozesse vereinfachen, Ergebnisse verbessern und skalieren.",
   ctaPrimary: { label: "Gespräch anfragen", href: "#kontakt" } satisfies Cta,
   ctaSecondary: { label: "Mehr erfahren", href: "#leistungen" } satisfies Cta,
   /** HUD annotations floating around the 3D signet. */
-  hudLabels: ["Strategie", "Code", "Automation", "Ergebnis"],
+  hudLabels: ["Klar.", "Präzise.", "Effizient.", "Skalierbar."],
 };
 
 export type ServiceCard = {
-  icon: "scan" | "code" | "grid";
+  icon: "nodes" | "code" | "bot";
   title: string;
   body: string;
 };
@@ -42,19 +43,19 @@ export const servicesContent = {
   eyebrow: "Leistungen",
   cards: [
     {
-      icon: "scan",
+      icon: "nodes",
       title: "KI-Konzepte",
-      body: "Klare Strategien, die künstliche Intelligenz sinnvoll, sicher und nachvollziehbar in deinen Alltag bringen.",
+      body: "Ich entwickle KI-Konzepte, die Mehrwert schaffen – strategisch, machbar und auf dein Ziel ausgerichtet.",
     },
     {
       icon: "code",
       title: "Individuelle Software",
-      body: "Maßgeschneiderte Anwendungen – gebaut exakt um deinen Prozess herum, nicht um eine Vorlage.",
+      body: "Maßgeschneiderte Softwarelösungen, die sich deinem Business anpassen – nicht umgekehrt.",
     },
     {
-      icon: "grid",
+      icon: "bot",
       title: "Kontrollierte Automatisierung",
-      body: "Wiederkehrende Abläufe laufen von selbst – transparent, prüfbar und jederzeit unter deiner Kontrolle.",
+      body: "Ich automatisiere repetitive Aufgaben zuverlässig – mit klaren Regeln, voller Kontrolle.",
     },
   ] satisfies ServiceCard[],
 };
@@ -70,23 +71,23 @@ export const approachContent = {
   index: "02",
   eyebrow: "Ansatz",
   title: "Premium heißt durchdacht — nicht überladen.",
-  body: "Jedes Projekt beginnt mit deinem Ziel, nicht mit der Technologie. Ich entwickle Lösungen, die schlank bleiben, sich selbst erklären und mit dir mitwachsen.",
-  link: { label: "Mein Ansatz", href: "#prozess" } satisfies Cta,
+  body: "Ich setze auf Klarheit, strategisches Denken, saubere Umsetzung und ehrliche Ergebnisse. Kein Buzzword-Bingo. Keine Komplexität um der Komplexität willen.",
+  link: { label: "Mehr erfahren", href: "#prozess" } satisfies Cta,
   points: [
     {
       index: "01",
       title: "Ziel zuerst",
-      body: "Wir starten mit dem Ergebnis, das du wirklich brauchst.",
+      body: "Wir definieren gemeinsam das Ziel, bevor wir bauen.",
     },
     {
       index: "02",
       title: "Schlank gebaut",
-      body: "Keine Funktionen ohne Zweck – kein technischer Ballast.",
+      body: "Ich entwickle nur das, was wirklich nötig ist – effizient und stabil.",
     },
     {
       index: "03",
       title: "Transparent",
-      body: "Du verstehst jederzeit, was passiert und warum.",
+      body: "Du weißt jederzeit, was passiert – klar, ehrlich und verständlich.",
     },
   ] satisfies ApproachPoint[],
 };
@@ -104,18 +105,18 @@ export const statsContent = {
   stats: [
     {
       value: "3×",
-      label: "Schnellere Umsetzung",
-      body: "durch klare Prozesse und Fokus.",
+      label: "",
+      body: "Projekte mit KI-Unternehmen erfolgreich umgesetzt in 12 Monaten",
     },
     {
       value: "100%",
-      label: "Maßgeschneidert",
-      body: "keine Standardlösungen. Nur das, was du brauchst.",
+      label: "",
+      body: "Automatisierungslösungen oder Softwarelieferungen nach Ziel – ohne unnötige Extras",
     },
     {
       value: "24/7",
-      label: "Automatisiert im Hintergrund",
-      body: "zuverlässig, skalierbar und immer für dich da.",
+      label: "KI, Automatisierung & Systeme",
+      body: "im Einsatz – keine Ausfälle, zuverlässig und stabil.",
     },
   ] satisfies StatItem[],
 };
@@ -132,25 +133,25 @@ export const processContent = {
   index: "04",
   eyebrow: "Prozess",
   title: "So arbeite ich.",
-  body: "Ein strukturierter Weg von der ersten Idee bis zur nachhaltigen Lösung.",
+  body: "Ein strukturierter Weg von der ersten Idee bis zum zuverlässigen System.",
   steps: [
     {
       index: "01",
       icon: "search",
       title: "Analyse",
-      body: "Wir klären Ziel, Kontext und Rahmen – und öffnen die richtigen Fragen.",
+      body: "Wir analysieren dein Problem und definieren das Ziel klar.",
     },
     {
       index: "02",
       icon: "document",
       title: "Konzept",
-      body: "Ich entwickle die Lösung und den Weg dorthin, inklusive realistischem Aufwand.",
+      body: "Ich entwickle ein passendes Konzept – effizient und realistisch.",
     },
     {
       index: "03",
       icon: "send",
       title: "Umsetzung",
-      body: "Gebaut, getestet und sauber übergeben – bereit für den Einsatz.",
+      body: "Ich setze um – mit Fokus auf Qualität, Stabilität und Ergebnis.",
     },
   ] satisfies ProcessStep[],
 };
@@ -160,12 +161,12 @@ export const contactContent = {
   index: "05",
   eyebrow: "Kontakt",
   title: "Lass uns dein Konzept bauen.",
-  body: "Erzähl mir kurz von deinem Vorhaben – du bekommst von mir einen ersten, ehrlichen Gedanken dazu zurück.",
+  body: "Bereit für ein smarteres, effizienteres, zukunftssicheres System? Ich freue mich auf dich.",
   cta: { label: "Gespräch anfragen", href: "mailto:kontakt@zian-ai.de" } satisfies Cta,
 };
 
 export const footerContent = {
   mark: "Z",
-  copyright: `© ${new Date().getFullYear()} Andre Zimmermann`,
+  copyright: "© 2025 Andre Zimmermann",
   brand: "ZIAN AI CONCEPTS",
 };

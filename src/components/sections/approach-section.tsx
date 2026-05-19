@@ -7,49 +7,49 @@ export function ApproachSection({ reduced = false }: { reduced?: boolean }) {
   return (
     <section
       id={approachContent.id}
-      className="relative overflow-hidden px-6 py-28 md:py-36"
+      className="section-band overflow-hidden"
     >
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-        <AbstractArchitectureGlow reduced={reduced} className="opacity-55" />
+        <AbstractArchitectureGlow reduced={reduced} className="opacity-26" />
       </div>
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(2,3,3,0.94)_0%,rgba(2,3,3,0.72)_42%,rgba(2,3,3,0.34)_70%,rgba(2,3,3,0.6)_100%)]"
+        className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,#020303_0%,rgba(2,3,3,0.95)_42%,rgba(2,3,3,0.66)_72%,#020303_100%)]"
       />
 
-      <div className="relative z-10 mx-auto grid max-w-6xl gap-12 md:grid-cols-2 md:gap-16">
-        <div>
-          <p className="flex items-center gap-3 text-xs font-medium uppercase tracking-[0.3em] text-[#f4d7a1]/75">
-            <span className="text-[#f8fbff]/35">{approachContent.index}</span>
-            <span aria-hidden className="h-px w-6 bg-white/15" />
+      <div className="zian-container relative z-10 grid gap-12 md:grid-cols-[0.9fr_1.1fr] md:gap-20">
+        <div className="max-w-[31rem]">
+          <p className="section-label">
+            <span className="section-label__index">{approachContent.index}</span>
+            <span aria-hidden className="section-label__line" />
             {approachContent.eyebrow}
           </p>
-          <h2 className="mt-6 text-3xl font-semibold uppercase leading-[1.12] tracking-tight text-[#f8fbff] md:text-5xl">
+          <h2 className="section-heading mt-10">
             {approachContent.title}
           </h2>
-          <p className="mt-6 max-w-md text-sm leading-relaxed text-[#f8fbff]/55 md:text-base">
+          <p className="body-copy mt-8">
             {approachContent.body}
           </p>
           <a
             href={approachContent.link.href}
-            className="mt-8 inline-flex items-center gap-2 border-b border-[#f8fbff]/25 pb-1 text-sm text-[#f8fbff]/70 transition-colors duration-200 hover:border-[#f8fbff]/60 hover:text-[#f8fbff]"
+            className="zian-link mt-10"
           >
             {approachContent.link.label}
             <Icon name="arrow-right" className="h-4 w-4" />
           </a>
         </div>
 
-        <ul className="divide-y divide-white/[0.06] self-center overflow-hidden rounded-2xl border border-white/[0.07] bg-white/[0.02]">
+        <ul className="tech-panel self-center divide-y divide-white/[0.075]">
           {approachContent.points.map((point) => (
-            <li key={point.title} className="flex gap-6 p-6 md:p-7">
-              <span className="text-sm font-semibold tracking-[0.1em] text-[#f4d7a1]/70">
+            <li key={point.title} className="grid gap-6 p-7 md:grid-cols-[3rem_1fr] md:p-10">
+              <span className="text-[1.04rem] font-bold tracking-[0.12em] text-[#d9b978]/78">
                 {point.index}
               </span>
               <div>
-                <h3 className="text-sm font-semibold uppercase tracking-[0.12em] text-[#f8fbff]">
+                <h3 className="text-[0.88rem] font-bold uppercase tracking-[0.12em] text-[#f3f4f1]">
                   {point.title}
                 </h3>
-                <p className="mt-2 text-sm leading-relaxed text-[#f8fbff]/55">
+                <p className="mt-3 max-w-sm text-[0.88rem] leading-[1.75] text-[#f3f4f1]/54">
                   {point.body}
                 </p>
               </div>

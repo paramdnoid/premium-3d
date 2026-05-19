@@ -4,21 +4,21 @@ import { Icon } from "./icons";
 /** Sticky translucent top navigation. */
 export function SiteHeader() {
   return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b border-white/[0.06] bg-[#010202]/70 backdrop-blur-md">
-      <div className="mx-auto flex h-20 max-w-6xl items-center justify-between gap-4 px-6">
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-white/[0.075] bg-[#020303]/82 backdrop-blur-xl">
+      <div className="zian-container flex h-[5.25rem] items-center justify-between gap-5">
         <a
           href="#top"
-          className="min-w-0 text-xs font-semibold uppercase tracking-[0.24em] text-[#f8fbff] sm:text-sm sm:tracking-[0.32em]"
+          className="min-w-0 text-[0.73rem] font-bold uppercase tracking-[0.34em] text-[#f3f4f1] sm:text-[0.78rem]"
         >
           {headerContent.brand}
         </a>
 
-        <nav className="hidden items-center gap-9 md:flex">
+        <nav className="hidden items-center gap-10 lg:flex">
           {headerContent.links.map((link) => (
             <a
               key={link.label}
               href={link.href}
-              className="text-sm text-[#f8fbff]/55 transition-colors duration-200 hover:text-[#f8fbff]"
+              className="text-[0.78rem] font-medium text-[#f3f4f1]/54 transition-colors duration-200 hover:text-[#f3f4f1]"
             >
               {link.label}
             </a>
@@ -27,7 +27,7 @@ export function SiteHeader() {
 
         <a
           href={headerContent.cta.href}
-          className="hidden shrink-0 items-center gap-2 rounded-md border border-[#f4d7a1]/35 px-5 py-2.5 text-sm font-medium text-[#f4d7a1] transition-colors duration-200 hover:border-[#f4d7a1]/70 hover:bg-[#f4d7a1]/10 sm:inline-flex"
+          className="hidden min-h-11 shrink-0 items-center gap-2 border border-[#d9b978]/42 px-5 text-[0.76rem] font-bold text-[#d9b978] transition-colors duration-200 hover:border-[#d9b978]/78 hover:bg-[#d9b978]/10 sm:inline-flex"
         >
           {headerContent.cta.label}
           <Icon name="arrow-up-right" className="h-4 w-4" />

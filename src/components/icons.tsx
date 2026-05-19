@@ -6,8 +6,10 @@ import type { SVGProps } from "react";
 
 export type IconName =
   | "scan"
+  | "nodes"
   | "code"
   | "grid"
+  | "bot"
   | "search"
   | "document"
   | "send"
@@ -21,6 +23,15 @@ const PATHS: Record<IconName, React.ReactNode> = {
       <circle cx="12" cy="12" r="3.2" />
     </>
   ),
+  nodes: (
+    <>
+      <circle cx="12" cy="6" r="2" />
+      <circle cx="6" cy="14" r="2" />
+      <circle cx="18" cy="14" r="2" />
+      <circle cx="12" cy="20" r="2" />
+      <path d="m10.8 7.6-3.6 4.8M13.2 7.6l3.6 4.8M8 14h8M7.6 15.6l2.8 2.8M16.4 15.6l-2.8 2.8" />
+    </>
+  ),
   code: (
     <>
       <path d="m8 7-5 5 5 5M16 7l5 5-5 5M13.5 4l-3 16" />
@@ -32,6 +43,12 @@ const PATHS: Record<IconName, React.ReactNode> = {
       <rect x="13.5" y="3.5" width="7" height="7" rx="1.4" />
       <rect x="3.5" y="13.5" width="7" height="7" rx="1.4" />
       <rect x="13.5" y="13.5" width="7" height="7" rx="1.4" />
+    </>
+  ),
+  bot: (
+    <>
+      <rect x="6" y="8" width="12" height="10" rx="2" />
+      <path d="M12 8V5M9 5h6M9.5 13h.01M14.5 13h.01M8 18v2M16 18v2M4 12h2M18 12h2" />
     </>
   ),
   search: (

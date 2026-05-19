@@ -1,29 +1,47 @@
+import Image from "next/image";
 import { contactContent } from "@/lib/content/site-content";
 import { Icon } from "@/components/icons";
+
+const contactArtworkSrc = "/assets/abstract-architecture-glow.svg";
 
 /** Section 05 — Kontakt: the closing call to action. */
 export function ContactSection() {
   return (
-    <section id={contactContent.id} className="relative px-6 py-32 md:py-44">
-      <div className="mx-auto max-w-3xl text-center">
-        <p className="flex items-center justify-center gap-3 text-xs font-medium uppercase tracking-[0.3em] text-[#f4d7a1]/75">
-          <span className="text-[#f8fbff]/35">{contactContent.index}</span>
-          <span aria-hidden className="h-px w-6 bg-white/15" />
+    <section id={contactContent.id} className="section-band overflow-hidden py-28 md:py-36">
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+        <Image
+          src={contactArtworkSrc}
+          alt=""
+          fill
+          sizes="100vw"
+          className="object-cover object-[18%_58%] opacity-40 md:opacity-52"
+        />
+      </div>
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(2,3,3,0.28)_0%,rgba(2,3,3,0.68)_45%,#020303_100%),linear-gradient(180deg,#020303_0%,rgba(2,3,3,0.48)_38%,#020303_100%)]"
+      />
+      <div className="zian-container relative z-10">
+        <div className="mx-auto max-w-[43rem] text-center">
+        <p className="section-label justify-center">
+          <span className="section-label__index">{contactContent.index}</span>
+          <span aria-hidden className="section-label__line" />
           {contactContent.eyebrow}
         </p>
-        <h2 className="mt-6 text-3xl font-semibold uppercase leading-[1.12] tracking-tight text-[#f8fbff] md:text-5xl">
+        <h2 className="section-heading mt-8">
           {contactContent.title}
         </h2>
-        <p className="mx-auto mt-6 max-w-xl text-sm leading-relaxed text-[#f8fbff]/55 md:text-base">
+        <p className="body-copy mx-auto mt-7 max-w-[35rem]">
           {contactContent.body}
         </p>
         <a
           href={contactContent.cta.href}
-          className="mt-10 inline-flex items-center gap-2 rounded-md bg-[#f4d7a1] px-7 py-3.5 text-sm font-semibold text-[#0a0a0a] transition-colors duration-200 hover:bg-[#f8e3b8]"
+          className="zian-btn mt-10"
         >
           {contactContent.cta.label}
           <Icon name="arrow-up-right" className="h-4 w-4" />
         </a>
+        </div>
       </div>
     </section>
   );

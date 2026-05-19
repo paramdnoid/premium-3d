@@ -4,32 +4,32 @@ import { Icon } from "@/components/icons";
 /** Section 01 — Leistungen: three service cards. */
 export function ServicesSection() {
   return (
-    <section id={servicesContent.id} className="relative px-6 py-28 md:py-36">
-      <div className="mx-auto max-w-6xl">
-        <p className="flex items-center gap-3 text-xs font-medium uppercase tracking-[0.3em] text-[#f4d7a1]/75">
-          <span className="text-[#f8fbff]/35">{servicesContent.index}</span>
-          <span aria-hidden className="h-px w-6 bg-white/15" />
+    <section id={servicesContent.id} className="section-band">
+      <div className="zian-container relative z-10">
+        <p className="section-label">
+          <span className="section-label__index">{servicesContent.index}</span>
+          <span aria-hidden className="section-label__line" />
           {servicesContent.eyebrow}
         </p>
 
-        <div className="mt-12 grid gap-5 md:grid-cols-3">
+        <div className="mt-9 grid gap-5 md:grid-cols-3">
           {servicesContent.cards.map((card) => (
             <article
               key={card.title}
-              className="group flex flex-col rounded-2xl border border-white/[0.07] bg-white/[0.02] p-8 transition-colors duration-300 hover:border-[#f4d7a1]/25"
+              className="tech-panel group flex min-h-[21.5rem] flex-col p-8 pt-10 transition-colors duration-300 hover:border-[#d9b978]/34 md:p-10"
             >
-              <span className="flex h-12 w-12 items-center justify-center rounded-lg border border-white/[0.09] text-[#f4d7a1]">
+              <span className="flex h-14 w-14 items-center justify-center border border-white/[0.12] text-[#f3f4f1]/80 shadow-[0_0_24px_rgba(217,185,120,0.06)]">
                 <Icon name={card.icon} className="h-5 w-5" />
               </span>
-              <h3 className="mt-8 text-lg font-semibold text-[#f8fbff]">
+              <h3 className="mt-10 text-[1.18rem] font-bold text-[#f3f4f1]">
                 {card.title}
               </h3>
-              <p className="mt-3 flex-1 text-sm leading-relaxed text-[#f8fbff]/55">
+              <p className="mt-5 flex-1 text-[0.88rem] leading-[1.85] text-[#f3f4f1]/54">
                 {card.body}
               </p>
               <Icon
                 name="arrow-right"
-                className="mt-8 h-5 w-5 text-[#f8fbff]/35 transition-colors duration-300 group-hover:text-[#f4d7a1]"
+                className="mt-9 h-5 w-5 text-[#d9b978]/68 transition-colors duration-300 group-hover:text-[#d9b978]"
               />
             </article>
           ))}

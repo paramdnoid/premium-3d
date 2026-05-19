@@ -11,16 +11,16 @@ import { ProcessSection } from "./sections/process-section";
 import { ServicesSection } from "./sections/services-section";
 import { StatsSection } from "./sections/stats-section";
 
-/** Static ambient-field state — a calm, moody backdrop behind the page. */
+/** Static ambient-field state — a restrained technical backdrop behind the page. */
 const ambientStyle: CSSProperties & Record<`--ambient-${string}`, string> = {
-  "--ambient-core-x": "42%",
-  "--ambient-core-y": "38%",
-  "--ambient-rotate": "-8deg",
-  "--ambient-scale-x": "1.08",
-  "--ambient-scale-y": "1.16",
+  "--ambient-core-x": "58%",
+  "--ambient-core-y": "30%",
+  "--ambient-rotate": "-6deg",
+  "--ambient-scale-x": "1.04",
+  "--ambient-scale-y": "1.1",
   "--ambient-skew": "0deg",
-  "--ambient-warp-opacity": "0.4",
-  "--ambient-warp-rotate": "0deg",
+  "--ambient-warp-opacity": "0.32",
+  "--ambient-warp-rotate": "-3deg",
   "--ambient-x": "0vw",
   "--ambient-y": "0vh",
 };
@@ -61,7 +61,7 @@ export default function ZianAiConceptsExperience() {
 
       <SiteHeader />
 
-      <div className="relative z-10">
+      <div className="page-shell">
         <HeroSection reduced={prefersReducedMotion} />
         <ServicesSection />
         <ApproachSection reduced={prefersReducedMotion} />
