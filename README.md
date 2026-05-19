@@ -20,5 +20,5 @@ pnpm start
 
 ## Notes
 
-- `three` is intentionally pinned to `0.183.0` because the current React Three Fiber release still uses `THREE.Clock` internally, which emits deprecation warnings with newer Three.js versions.
+- `three` is intentionally pinned to `0.182.0` because the current React Three Fiber release still uses `THREE.Clock` internally, which emits deprecation warnings with newer Three.js versions.
 - The experience respects reduced-motion preferences by disabling scroll rotation, idle floating, sparkle movement, and CSS transition timing.
