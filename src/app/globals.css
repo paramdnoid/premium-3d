@@ -21,8 +21,25 @@
 html {
   min-height: 100%;
   background: var(--background);
-  scroll-behavior: smooth;
-  scroll-padding-top: 5rem;
+  scroll-behavior: auto;
+}
+
+/* Lenis smooth-scroll */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: clip;
 }
 
 body {
@@ -122,54 +139,14 @@ a {
   opacity: 0.2;
 }
 
-.zian-logo-3d-stage {
-  position: relative;
-  width: min(72vw, 440px);
-  aspect-ratio: 1;
-  filter:
-    drop-shadow(0 42px 54px rgba(0, 0, 0, 0.92))
-    drop-shadow(0 0 34px rgba(221, 228, 218, 0.13));
-  transform: translate3d(0, 0, 0);
-}
-
-.zian-logo-3d-stage::before,
-.zian-logo-3d-stage::after {
-  pointer-events: none;
-  position: absolute;
-  content: "";
-  border-radius: 999px;
-}
-
-.zian-logo-3d-stage::before {
-  inset: 12% 10% 10%;
-  background:
-    radial-gradient(circle at 48% 35%, rgba(248, 251, 255, 0.14), transparent 34%),
-    radial-gradient(circle at 50% 56%, rgba(244, 215, 161, 0.09), transparent 58%);
-  filter: blur(22px);
-  opacity: 0.82;
-}
-
-.zian-logo-3d-stage::after {
-  left: 18%;
-  right: 18%;
-  bottom: 5%;
-  height: 8%;
-  background: radial-gradient(ellipse at center, rgba(222, 232, 222, 0.2), rgba(244, 215, 161, 0.08) 42%, transparent 74%);
-  filter: blur(10px);
-  opacity: 0.72;
-  transform: perspective(420px) rotateX(62deg);
-}
-
-.zian-logo-3d-stage canvas {
-  position: relative;
-  z-index: 1;
+canvas {
   display: block;
 }
 
-@media (max-width: 640px) {
-  .zian-logo-3d-stage {
-    width: min(78vw, 340px);
-  }
+/* Section reveal — content starts geometrically clipped, wiped open on scroll. */
+.reveal {
+  clip-path: inset(0px 0px 100% 0px);
+  will-change: clip-path, transform;
 }
 
 .premium-experience.is-reduced-motion *,
