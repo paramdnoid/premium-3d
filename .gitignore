@@ -11,6 +11,8 @@
 !.yarn/versions
 .playwright-mcp
 .pnpm-store
+.codex-chrome
+.codex-sceenshots
 
 # testing
 /coverage
