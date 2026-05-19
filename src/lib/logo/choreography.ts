@@ -6,9 +6,9 @@ import type { LineDef, PartDef } from "./parts";
 
 /**
  * Stage 3B choreography. As the page scrolls the signet spins around its own
- * axis and sheds its 22 parts in five staggered batches — each batch flies off
- * the screen, leaving a clean landing page behind. Driven entirely by global
- * scroll progress (0..1); fully reversible.
+ * axis and sheds its solid, wireframe and cinematic detail parts in five
+ * staggered batches. Driven entirely by global scroll progress (0..1); fully
+ * reversible.
  */
 
 const BATCH_COUNT = 5;

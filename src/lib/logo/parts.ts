@@ -43,17 +43,6 @@ export type PartDef = MeshPartDef | LinesPartDef;
 
 const NO_SCALE: Point3 = [1, 1, 1];
 
-// --- Rear rivets — six spheres at the outer hexagon vertices ----------------
-const rivetParts: MeshPartDef[] = outerPath.map(([x, y], index) => ({
-  id: `rear-rivet-${index}`,
-  kind: "mesh",
-  geometry: "rivet",
-  material: "rearRivet",
-  homePosition: [x * 0.92, y * 0.92, -0.69],
-  homeScale: NO_SCALE,
-  order: index,
-}));
-
 // --- Structural meshes ------------------------------------------------------
 const structuralParts: MeshPartDef[] = [
   {
@@ -120,15 +109,6 @@ const structuralParts: MeshPartDef[] = [
     order: 17,
   },
   {
-    id: "z-side",
-    kind: "mesh",
-    geometry: "z",
-    material: "zSide",
-    homePosition: [0.055, 0.06, 0.38],
-    homeScale: [1.008, 1.008, 0.72],
-    order: 18,
-  },
-  {
     id: "z-main",
     kind: "mesh",
     geometry: "z",
@@ -149,6 +129,37 @@ const facetParts: MeshPartDef[] = [0, 1, 2, 3, 4, 5].map((index) => ({
   homeScale: NO_SCALE,
   order: 10 + index,
 }));
+
+// --- Raised cinematic detail layers -----------------------------------------
+const detailParts: MeshPartDef[] = [
+  {
+    id: "outer-rails",
+    kind: "mesh",
+    geometry: "outerRails",
+    material: "outerRail",
+    homePosition: [0, 0, 0.655],
+    homeScale: NO_SCALE,
+    order: 13,
+  },
+  {
+    id: "inner-rails",
+    kind: "mesh",
+    geometry: "innerRails",
+    material: "innerRail",
+    homePosition: [0, 0, 0.682],
+    homeScale: NO_SCALE,
+    order: 14,
+  },
+  {
+    id: "z-inlays",
+    kind: "mesh",
+    geometry: "zInlays",
+    material: "zInset",
+    homePosition: [0, 0.12, 0.642],
+    homeScale: NO_SCALE,
+    order: 18,
+  },
+];
 
 // --- Wireframe cage ---------------------------------------------------------
 const depthRibs: LineDef[] = outerPath.map(([x, y]) => ({
@@ -217,8 +228,8 @@ const wireframeLines: LineDef[] = [
   },
   {
     points: [
-      [-0.58, 0.28, 0.69],
-      [0.5, -0.42, 0.69],
+      [-0.58, -0.42, 0.69],
+      [0.5, 0.28, 0.69],
     ],
     color: "#e9ece4",
     lineWidth: 0.56,
@@ -237,8 +248,8 @@ const wireframeLines: LineDef[] = [
   },
   {
     points: [
-      [-0.58, 0.36, -0.74],
-      [0.58, -0.36, -0.74],
+      [-0.58, -0.36, -0.74],
+      [0.58, 0.36, -0.74],
     ],
     color: "#e3e6dd",
     lineWidth: 0.5,
@@ -266,10 +277,10 @@ const wireframePart: LinesPartDef = {
   order: 12,
 };
 
-/** Every choreographable part of the signet (22 in total). */
+/** Every choreographable part of the signet. */
 export const PARTS: PartDef[] = [
-  ...rivetParts,
   ...structuralParts,
   ...facetParts,
+  ...detailParts,
   wireframePart,
 ];

@@ -20,7 +20,7 @@ export function ApproachSection() {
             </p>
           </div>
 
-          <ul className="divide-y divide-white/[0.06] self-center overflow-hidden rounded-2xl border border-white/[0.07] bg-white/[0.02]">
+          <ul className="divide-y divide-white/6 self-center overflow-hidden rounded-2xl border border-white/[0.07] bg-white/2">
             {approachContent.points.map((point) => (
               <li key={point.title} className="p-6 md:p-7">
                 <h3 className="text-base font-semibold text-[#f8fbff]">{point.title}</h3>

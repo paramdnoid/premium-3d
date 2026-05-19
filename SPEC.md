@@ -15,7 +15,7 @@ zusammengefasst, aber nicht Gegenstand der Spezifikation.
 
 Die Anwendung ist eine **Single-Page-Landingpage** für die Marke „ZIAN AI
 CONCEPTS" (Andre Zimmermann). Kernstück ist ein **3D-Signet**, das beim Scrollen
-rotiert und sich in 22 Einzelteile zerlegt, die in fünf Wellen aus dem Viewport
+rotiert und sich in 18 Einzelteile zerlegt, die in fünf Wellen aus dem Viewport
 fliegen. Darunter liegt klassischer HTML-Content in sechs Sektionen.
 
 Die gesamte Bewegung ist **rein scroll-gesteuert** (kein Autoplay, keine
@@ -77,10 +77,10 @@ plus einem CSS-Glanz-Overlay:
 ```
 ┌─ <main class="premium-experience"> ──────────────────────┐
 │                                                          │
-│  z-30  .journey-canvas   ← 3D-Logo (fixed, R3F-Canvas)   │
-│        pointer-events-none · aria-hidden                 │
-│                                                          │
 │  z-10  Content-Spalte    ← 6 HTML-Sektionen (scrollt)    │
+│                                                          │
+│  z-2   .journey-canvas   ← 3D-Logo (fixed, R3F-Canvas)   │
+│        pointer-events-none · aria-hidden                 │
 │                                                          │
 │  z-1   ::before          ← CSS-Glanz/Lichtstreif-Overlay │
 │                                                          │
@@ -89,10 +89,10 @@ plus einem CSS-Glanz-Overlay:
 └──────────────────────────────────────────────────────────┘
 ```
 
-Das 3D-Canvas liegt **über** dem Content (`z-30`), ist aber
+Das 3D-Canvas liegt **hinter** dem Content (`z-[2]` unter `z-10`), ist aber
 `pointer-events-none` und `aria-hidden` — es fängt keine Eingaben ab und ist
-für Screenreader unsichtbar. Die fliegenden Logo-Teile dürfen so visuell über
-dem Text schweben, ohne ihn zu blockieren.
+für Screenreader unsichtbar. Die fliegenden Logo-Teile bleiben dadurch visuell
+im Hintergrund, ohne Text oder Interaktion zu blockieren.
 
 ### 3.2 Dateistruktur
 
@@ -120,7 +120,7 @@ src/
 └── lib/
     ├── content/site-content.ts     Sämtliche Texte (Single Source of Truth)
     ├── logo/
-    │   ├── parts.ts                22 Part-Definitionen des Signets
+    │   ├── parts.ts                18 Part-Definitionen des Signets
     │   ├── geometry.ts             2D-Pfade → Three-Geometrien & Materialien
     │   └── choreography.ts         Batches, Posen-Interpolation pro Frame
     └── scroll/
@@ -236,10 +236,16 @@ Logo einen kleineren Höhenanteil (0.30 statt 0.46).
 
 | Lichtquelle | Parameter |
 |---|---|
-| `ambientLight` | Intensität 0.34 |
-| `directionalLight` ×3 | Key (warm `#f7f7ef`, 0.86), Fill (`#d7d9d0`, 0.34), Rim/hinten (`#dce7d8`, 0.52) |
-| `pointLight` ×3 | warmes Key (3.4), neutrales Fill (1.7), goldener Akzent hinten (`#f4d7a1`, 2.2) |
-| `<Environment preset="city">` | `environmentIntensity={0.12}` — dezente Reflexionen auf den metallischen Materialien |
+| `ambientLight` | Intensität 0.26 — stärkere Grundzeichnung |
+| `directionalLight` ×3 | Key (warm `#fff8ea`, 1.38), Fill (`#dbe4d8`, 0.34), Rim/hinten (`#e6f1dc`, 1.18) |
+| `spotLight` ×2 | enger weißer Specular-Key (32), goldener Glanzakzent (17) |
+| `pointLight` ×3 | neutrales Fill (2.2), goldener Akzent hinten (`#f4d7a1`, 4.8), warmer Front-Glow (5.8) |
+| `<Environment preset="city">` | `environmentIntensity={0.28}` — stärkere Reflexionen auf den metallischen Materialien |
+| `CinematicGlow` | zwei additive DataTexture-Planes hinter dem Logo für einen sichtbaren Bloom-Eindruck ohne Postprocessing |
+
+Der WebGL-Renderer nutzt `ACESFilmicToneMapping` mit `toneMappingExposure = 1.28`,
+damit die Rails und Inlays kräftige Lichtkanten bekommen, ohne die Z-Front zu
+überstrahlen.
 
 > ⚠️ `<Environment preset="city">` lädt eine HDR-Datei von einem externen Host
 > (`raw.githack.com`). Siehe [Abschnitt 11](#11-bekannte-einschränkungen).
@@ -251,12 +257,19 @@ Logo einen kleineren Höhenanteil (0.30 statt 0.46).
 - **Per-Part-Refs:** ein `partRefs`-Array hält die `THREE.Group` je Teil.
 - **`useFrame`:**
   1. Liest `progress`/`reduced` aus dem Scroll-Ref; bei Reduced-Motion gilt `p = 0`.
-  2. Ruft `applyPose(part, p, group)` für jedes der 22 Teile.
-  3. Steuert die `liftRef`-Gruppe: **Idle-Schweben** (Sinus, nur solange montiert,
-     `p < 0.06`) und **Aufstieg** — das Signet hebt um bis zu 6 Welteinheiten ab,
-     während es sich zerlegt (`p` von 0.04 bis ~0.26), damit kein Trümmerteil
-     über dem Content liegen bleibt.
-- **Lift-Basis:** `LOGO_LIFT = 1.9` — hebt das Signet in den oberen Hero-Bereich.
+  2. Ruft `applyPose(part, p, group)` für jedes der 18 Teile.
+  3. Steuert die `liftRef`-Gruppe: **langsame Idle-Drehung** um die Y-Achse
+     (`0.16 rad/s`, nur solange montiert, `p < 0.06`), dezentes vertikales
+     Schweben und **Aufstieg** — das Signet hebt um bis zu 6 Welteinheiten ab,
+     während es sich zerlegt (`p` von 0.04 bis ~0.26).
+- **Lift-Basis:** `LOGO_LIFT = -0.45` — setzt das Signet hinter die Hero-Wortmarke.
+- **Backdrop-Skalierung:** Das Signet wird im Canvas zusätzlich mit
+  `BACKDROP_LOGO_SCALE = 1.34` vergrößert, damit es als Hintergrundform hinter
+  dem Text steht.
+- **Assembled-Depth:** Die montierte Ansicht ist auf
+  `ASSEMBLED_DEPTH_SCALE = 0.52` in der Z-Achse komprimiert. Ab `p = 0.04`
+  öffnet sich die Tiefe bis `p = 0.20` weich auf 100%, damit die Zerlegung
+  weiterhin räumlich auseinandergehen kann.
 
 ---
 
@@ -276,43 +289,40 @@ Das Signet wird **prozedural aus 2D-Pfaden** gebaut — keine externen 3D-Assets
 
 ### 6.2 Geometrien (`createLogoGeometry`)
 
-14 `THREE.BufferGeometry`-Instanzen:
+16 `THREE.BufferGeometry`-Instanzen:
 
 - **`ExtrudeGeometry`** (mit Bevel): `shell`, `core`, `z`, `edge`
+- **Grouped Raised Detail-Extrudes:** `outerRails`, `innerRails`, `zInlays`
 - **`ShapeGeometry`** (flach): `rearPanel`, `rearInset`, `rearZ`, `facet0…5`
-- **`SphereGeometry`**: `rivet` (Radius 0.018)
 
-`shell/core/z/edge` werden mit `.center()` zentriert. Für **alle** Geometrien
-wird `computeBoundingBox()` aufgerufen — die Choreografie braucht die Bounding-
-Box, um den Pivot (Schwerpunkt) jedes Teils zu bestimmen.
+`shell/core/z/edge` werden mit `.center()` zentriert. Die Detail-Layer bleiben
+in Logo-Koordinaten und werden als eigene Parts positioniert. Für **alle**
+Geometrien wird `computeBoundingBox()` aufgerufen — die Choreografie braucht
+die Bounding-Box, um den Pivot (Schwerpunkt) jedes Teils zu bestimmen.
 
 ### 6.3 Materialien (`createLogoMaterials`)
 
 17 Material-Instanzen, gemischt aus:
 
-- `MeshStandardMaterial` — `shell`, `core`, `zSide`, `rearZ`, `rearShadow`, `rim`, 6× Facette
-- `MeshPhysicalMaterial` (mit Clearcoat) — `z`, `rearPanel`, `rearInset`
-- `MeshBasicMaterial` — `rearRivet`
+- `MeshPhysicalMaterial` — `shell`, `core`, `z`, `rearPanel`, `rearInset`, `outerRail`, `innerRail`, `zInset`, 6× Facette
+- `MeshStandardMaterial` — `rearZ`, `rearShadow`, `rim`
 
-Durchgängig hoch-metallisch (`metalness` 0.68–1.0), viele teils transparent
-(`opacity` 0.06–0.92). Die Farbpalette ist dunkel-monochrom mit warmem
-Gold-Akzent (`#f4d7a1`).
-
-> Geometrie & Materialien sind laut Quelltext-Kommentar **verbatim** aus einer
-> früheren `zian-logo-3d.tsx` portiert, damit das montierte Logo pixelidentisch
-> bleibt.
+Die Hauptflächen verwenden eine kleine prozedurale `DataTexture` als
+Mikro-Bump-Struktur. Die Farbpalette bleibt dunkel-monochrom mit warmem
+Gold-Akzent (`#f4d7a1`), aber die Z-Front, Rails und Inlays bekommen
+kräftige Emissive-, Clearcoat- und Roughness-Kontraste.
 
 ---
 
 ## 7. Logo-Teile (`lib/logo/parts.ts`)
 
-Das Signet zerfällt in **22 choreografierbare Teile** (`PARTS`), `LOGO_SCALE = 1.06`:
+Das Signet zerfällt in **18 choreografierbare Teile** (`PARTS`), `LOGO_SCALE = 1.06`:
 
 | Gruppe | Anzahl | IDs / `order` |
 |---|---|---|
-| Heck-Nieten | 6 | `rear-rivet-0…5`, `order` 0–5 |
-| Strukturteile | 9 | `rear-z`(6), `rear-inset`(7), `rear-panel`(8), `rear-shadow`(9), `core`(15), `shell`(16), `rim`(17), `z-side`(18), `z-main`(19) |
+| Strukturteile | 8 | `rear-z`(6), `rear-inset`(7), `rear-panel`(8), `rear-shadow`(9), `core`(15), `shell`(16), `rim`(17), `z-main`(19) |
 | Front-Facetten | 6 | `facet-0…5`, `order` 10–15 |
+| Gruppierte Details | 3 | `outer-rails`(13), `inner-rails`(14), `z-inlays`(18) |
 | Wireframe-Käfig | 1 | `wireframe` (`order` 12) — als **eine** starre Einheit |
 
 Jede Definition (`PartDef`) trägt `homePosition`, `homeScale` und `order`.
@@ -332,7 +342,7 @@ Jede Definition (`PartDef`) trägt `homePosition`, `homeScale` und `order`.
 
 ### 8.1 Konzept
 
-Beim Scrollen rotiert das Signet um die eigene Y-Achse und stößt seine 22 Teile
+Beim Scrollen rotiert das Signet um die eigene Y-Achse und stößt seine 18 Teile
 in **5 gestaffelten Wellen** (Batches) ab. Jedes Teil durchläuft drei Phasen:
 **montiert → abgelöst → abgeflogen**. Alles ist eine reine Funktion von
 `progress` und damit voll reversibel.
@@ -419,8 +429,8 @@ zugeschnitten.
 Alle in `zian-ai-concepts-experience.tsx` in fester Reihenfolge gerendert:
 Hero → Services → Approach → Stats → Process → Contact.
 
-- Hero: `min-h-[100svh]`, Wortmarke unten zentriert; das 3D-Signet schwebt
-  darüber im fixierten Canvas.
+- Hero: `min-h-[100svh]`, Wortmarke unten zentriert; das 3D-Signet rotiert
+  langsam dahinter im fixierten Canvas.
 - Sektionen 01–05: gleiche Struktur (`max-w-6xl`, Eyebrow mit Index-Nummer,
   H2, Karten-/Listen-Grid). Jede Sektion hat eine `id` (`leistungen`, `ansatz`,
   `zahlen`, `prozess`, `kontakt`) für Anker-Navigation.
@@ -506,7 +516,7 @@ hier nur dokumentiert, nicht behoben:
 | Begriff | Bedeutung |
 |---|---|
 | **Signet** | Das 3D-Logo — ein hexagonales „Z"-Emblem |
-| **Journey** | Die memoisierte Sammlung aller 22 Teile inkl. Choreografie-Daten |
+| **Journey** | Die memoisierte Sammlung aller 18 Teile inkl. Choreografie-Daten |
 | **Part** | Ein einzelnes choreografierbares Teil (Mesh oder Lines) |
 | **Batch** | Eine von 5 Demontage-Wellen |
 | **Pose** | Position + Quaternion eines Teils zu einem `progress`-Wert |

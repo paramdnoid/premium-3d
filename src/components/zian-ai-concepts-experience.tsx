@@ -60,9 +60,9 @@ export default function ZianAiConceptsExperience() {
         <div className="ambient-field__grain" />
       </div>
 
-      {/* The disassembling signet — fixed above the page, never blocks input. */}
+      {/* The disassembling signet — fixed behind the content, never blocks input. */}
       <div
-        className="journey-canvas pointer-events-none fixed inset-0 z-30"
+        className="journey-canvas pointer-events-none fixed inset-0 z-[2]"
         aria-hidden="true"
       >
         <JourneyLogo scrollRef={scrollState} />

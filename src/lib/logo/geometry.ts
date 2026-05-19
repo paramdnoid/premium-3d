@@ -96,6 +96,77 @@ function createShape(points: Point2[]): THREE.Shape {
   return shape;
 }
 
+function createStripShape(start: Point2, end: Point2, width: number): THREE.Shape {
+  const [sx, sy] = start;
+  const [ex, ey] = end;
+  const dx = ex - sx;
+  const dy = ey - sy;
+  const length = Math.hypot(dx, dy) || 1;
+  const nx = (-dy / length) * (width / 2);
+  const ny = (dx / length) * (width / 2);
+
+  return createShape([
+    [sx + nx, sy + ny],
+    [ex + nx, ey + ny],
+    [ex - nx, ey - ny],
+    [sx - nx, sy - ny],
+  ]);
+}
+
+function createRaisedStripsGeometry(
+  strokes: [Point2, Point2][],
+  width: number,
+  depth: number,
+) {
+  return new THREE.ExtrudeGeometry(strokes.map(([start, end]) => createStripShape(start, end, width)), {
+    depth,
+    bevelEnabled: true,
+    bevelSegments: 3,
+    bevelSize: Math.min(width * 0.22, 0.006),
+    bevelThickness: Math.min(depth * 0.45, 0.006),
+    curveSegments: 4,
+    steps: 1,
+  });
+}
+
+function createMicroEtchTexture(): THREE.DataTexture {
+  const size = 64;
+  const data = new Uint8Array(size * size);
+
+  for (let y = 0; y < size; y += 1) {
+    for (let x = 0; x < size; x += 1) {
+      const diagonal = ((x + y * 1.7) % 17) / 17;
+      const cross = ((x * 1.9 - y) % 23) / 23;
+      const grain = Math.sin(x * 12.9898 + y * 78.233) * 43758.5453;
+      const noise = grain - Math.floor(grain);
+      const value = 138 + diagonal * 34 + cross * 18 + noise * 24;
+      data[y * size + x] = Math.max(0, Math.min(255, Math.round(value)));
+    }
+  }
+
+  const texture = new THREE.DataTexture(data, size, size, THREE.RedFormat);
+  texture.wrapS = THREE.RepeatWrapping;
+  texture.wrapT = THREE.RepeatWrapping;
+  texture.repeat.set(3.5, 3.5);
+  texture.needsUpdate = true;
+  return texture;
+}
+
+const zInsetStrokes: [Point2, Point2][] = [
+  [
+    [-0.72, 0.61],
+    [0.62, 0.61],
+  ],
+  [
+    [-0.47, -0.38],
+    [0.42, 0.18],
+  ],
+  [
+    [-0.62, -0.56],
+    [0.68, -0.56],
+  ],
+];
+
 /** Closes a 2D path into a 3D line loop at the given depth. */
 export function closeLine(points: Point2[], z: number): Point3[] {
   return [...points, points[0]].map(([x, y]) => [x, y, z]);
@@ -109,7 +180,9 @@ export type GeometryKey =
   | "rearPanel"
   | "rearInset"
   | "rearZ"
-  | "rivet"
+  | "outerRails"
+  | "innerRails"
+  | "zInlays"
   | "facet0"
   | "facet1"
   | "facet2"
@@ -120,18 +193,18 @@ export type GeometryKey =
 export type LogoGeometry = Record<GeometryKey, THREE.BufferGeometry>;
 
 /**
- * Builds every geometry of the signet. Ported verbatim from the original
- * `zian-logo-3d.tsx` so the assembled logo is pixel-identical. Bounding boxes
- * are pre-computed — the choreography uses them to find each part's pivot.
+ * Builds every geometry of the signet. The primary silhouette is kept intact
+ * while cinematic detail layers add grouped raised rails and Z inlays.
+ * Bounding boxes are pre-computed — the choreography uses them to find pivots.
  */
 export function createLogoGeometry(): LogoGeometry {
   const shell = new THREE.ExtrudeGeometry(createShape(outerPath), {
     depth: 0.56,
     bevelEnabled: true,
-    bevelSegments: 12,
-    bevelSize: 0.052,
-    bevelThickness: 0.058,
-    curveSegments: 16,
+    bevelSegments: 16,
+    bevelSize: 0.06,
+    bevelThickness: 0.066,
+    curveSegments: 18,
     steps: 3,
   });
   const core = new THREE.ExtrudeGeometry(createShape(innerPath), {
@@ -155,16 +228,15 @@ export function createLogoGeometry(): LogoGeometry {
   const edge = new THREE.ExtrudeGeometry(createShape(outerPath), {
     depth: 0.08,
     bevelEnabled: true,
-    bevelSegments: 8,
-    bevelSize: 0.018,
-    bevelThickness: 0.018,
+    bevelSegments: 10,
+    bevelSize: 0.022,
+    bevelThickness: 0.022,
     curveSegments: 12,
     steps: 1,
   });
   const rearPanel = new THREE.ShapeGeometry(createShape(outerPath));
   const rearInset = new THREE.ShapeGeometry(createShape(innerPath));
   const rearZ = new THREE.ShapeGeometry(createShape(rearZPath));
-  const rivet = new THREE.SphereGeometry(0.018, 12, 12);
 
   shell.center();
   core.center();
@@ -172,6 +244,21 @@ export function createLogoGeometry(): LogoGeometry {
   edge.center();
 
   const facets = frontFacets.map((facet) => new THREE.ShapeGeometry(createShape(facet.points)));
+  const outerRails = createRaisedStripsGeometry(
+    outerPath.map((point, index) => [point, outerPath[(index + 1) % outerPath.length]]),
+    0.03,
+    0.016,
+  );
+  const innerRails = createRaisedStripsGeometry(
+    innerPath.map((point, index) => [point, innerPath[(index + 1) % innerPath.length]]),
+    0.018,
+    0.012,
+  );
+  const zInlays = createRaisedStripsGeometry(
+    zInsetStrokes,
+    0.024,
+    0.012,
+  );
 
   const geometry: LogoGeometry = {
     shell,
@@ -181,7 +268,9 @@ export function createLogoGeometry(): LogoGeometry {
     rearPanel,
     rearInset,
     rearZ,
-    rivet,
+    outerRails,
+    innerRails,
+    zInlays,
     facet0: facets[0],
     facet1: facets[1],
     facet2: facets[2],
@@ -201,11 +290,12 @@ export type MaterialKey =
   | "shell"
   | "core"
   | "z"
-  | "zSide"
+  | "outerRail"
+  | "innerRail"
+  | "zInset"
   | "rearPanel"
   | "rearInset"
   | "rearZ"
-  | "rearRivet"
   | "rearShadow"
   | "rim"
   | "facet0"
@@ -217,91 +307,125 @@ export type MaterialKey =
 
 export type LogoMaterials = Record<MaterialKey, THREE.Material>;
 
-/** Builds every material of the signet, ported verbatim from the original. */
+/** Builds every material of the signet. */
 export function createLogoMaterials(): LogoMaterials {
+  const microEtch = createMicroEtchTexture();
   const facetMaterials = frontFacets.map(
     (facet) =>
-      new THREE.MeshStandardMaterial({
+      new THREE.MeshPhysicalMaterial({
         color: facet.color,
-        metalness: 0.86,
+        metalness: 0.94,
         opacity: facet.opacity,
-        roughness: facet.roughness,
+        roughness: Math.max(0.14, facet.roughness - 0.16),
+        clearcoat: 0.68,
+        clearcoatRoughness: 0.18,
+        bumpMap: microEtch,
+        bumpScale: 0.008,
         side: THREE.DoubleSide,
         transparent: true,
       }),
   );
 
   return {
-    shell: new THREE.MeshStandardMaterial({
-      color: "#050706",
-      emissive: "#020403",
-      emissiveIntensity: 0.035,
-      metalness: 0.68,
-      roughness: 0.52,
+    shell: new THREE.MeshPhysicalMaterial({
+      color: "#030504",
+      emissive: "#09100b",
+      emissiveIntensity: 0.075,
+      metalness: 0.9,
+      roughness: 0.24,
+      clearcoat: 0.78,
+      clearcoatRoughness: 0.14,
+      bumpMap: microEtch,
+      bumpScale: 0.01,
     }),
-    core: new THREE.MeshStandardMaterial({
-      color: "#030303",
-      emissive: "#000000",
-      emissiveIntensity: 0,
-      metalness: 0,
-      roughness: 1,
+    core: new THREE.MeshPhysicalMaterial({
+      color: "#070908",
+      emissive: "#10140f",
+      emissiveIntensity: 0.05,
+      metalness: 0.4,
+      roughness: 0.48,
+      clearcoat: 0.82,
+      clearcoatRoughness: 0.12,
       transparent: true,
-      opacity: 0.78,
+      opacity: 0.84,
+      bumpMap: microEtch,
+      bumpScale: 0.006,
     }),
     z: new THREE.MeshPhysicalMaterial({
-      color: "#bfc1bb",
-      emissive: "#989a94",
-      emissiveIntensity: 0.18,
-      metalness: 0.88,
-      roughness: 0.24,
-      clearcoat: 0.7,
-      clearcoatRoughness: 0.18,
-      reflectivity: 0.58,
+      color: "#f0f3ea",
+      emissive: "#cdd5c5",
+      emissiveIntensity: 0.22,
+      metalness: 0.98,
+      roughness: 0.08,
+      clearcoat: 1,
+      clearcoatRoughness: 0.035,
+      reflectivity: 0.92,
+      bumpMap: microEtch,
+      bumpScale: 0.004,
     }),
-    zSide: new THREE.MeshStandardMaterial({
-      color: "#22231f",
-      emissive: "#050505",
-      emissiveIntensity: 0.03,
-      metalness: 0.82,
-      roughness: 0.28,
+    outerRail: new THREE.MeshPhysicalMaterial({
+      color: "#d7ddd0",
+      emissive: "#8a947f",
+      emissiveIntensity: 0.2,
+      metalness: 1,
+      roughness: 0.06,
+      clearcoat: 1,
+      clearcoatRoughness: 0.025,
+      bumpMap: microEtch,
+      bumpScale: 0.003,
+    }),
+    innerRail: new THREE.MeshPhysicalMaterial({
+      color: "#252922",
+      emissive: "#070907",
+      emissiveIntensity: 0.09,
+      metalness: 0.9,
+      roughness: 0.18,
+      clearcoat: 0.82,
+      clearcoatRoughness: 0.08,
+      bumpMap: microEtch,
+      bumpScale: 0.005,
+    }),
+    zInset: new THREE.MeshPhysicalMaterial({
+      color: "#fbfff2",
+      emissive: "#edf7df",
+      emissiveIntensity: 0.3,
+      metalness: 1,
+      roughness: 0.045,
+      clearcoat: 1,
+      clearcoatRoughness: 0.02,
     }),
     rearPanel: new THREE.MeshPhysicalMaterial({
       color: "#111511",
-      emissive: "#070a07",
-      emissiveIntensity: 0.08,
+      emissive: "#10170f",
+      emissiveIntensity: 0.12,
       metalness: 0.88,
       opacity: 0.92,
-      roughness: 0.34,
-      clearcoat: 0.42,
-      clearcoatRoughness: 0.28,
+      roughness: 0.2,
+      clearcoat: 0.74,
+      clearcoatRoughness: 0.12,
       side: THREE.DoubleSide,
       transparent: true,
     }),
     rearInset: new THREE.MeshPhysicalMaterial({
       color: "#1b1f1a",
-      emissive: "#0a0d0b",
-      emissiveIntensity: 0.08,
+      emissive: "#111811",
+      emissiveIntensity: 0.12,
       metalness: 0.9,
       opacity: 0.58,
-      roughness: 0.26,
-      clearcoat: 0.52,
-      clearcoatRoughness: 0.22,
+      roughness: 0.14,
+      clearcoat: 0.78,
+      clearcoatRoughness: 0.08,
       side: THREE.DoubleSide,
       transparent: true,
     }),
     rearZ: new THREE.MeshStandardMaterial({
-      color: "#d4d7cf",
-      emissive: "#7f837b",
-      emissiveIntensity: 0.12,
+      color: "#eef3e7",
+      emissive: "#dbe6d2",
+      emissiveIntensity: 0.22,
       metalness: 0.94,
       opacity: 0.18,
-      roughness: 0.2,
+      roughness: 0.08,
       side: THREE.DoubleSide,
-      transparent: true,
-    }),
-    rearRivet: new THREE.MeshBasicMaterial({
-      color: "#dce1d7",
-      opacity: 0.24,
       transparent: true,
     }),
     rearShadow: new THREE.MeshStandardMaterial({
@@ -312,12 +436,12 @@ export function createLogoMaterials(): LogoMaterials {
       roughness: 0.48,
     }),
     rim: new THREE.MeshStandardMaterial({
-      color: "#e8ebe3",
-      emissive: "#f4f7ef",
-      emissiveIntensity: 0.12,
+      color: "#fbfff4",
+      emissive: "#f9ffe9",
+      emissiveIntensity: 0.28,
       metalness: 1,
-      opacity: 0.08,
-      roughness: 0.2,
+      opacity: 0.16,
+      roughness: 0.06,
       transparent: true,
     }),
     facet0: facetMaterials[0],
